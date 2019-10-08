@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include "clist.h"
 
 struct point {
@@ -10,7 +11,9 @@ struct point {
 };
 
 void add_point (struct intrusive_list * list, int x, int y) {
+    assert(list != NULL);
     struct point * p = malloc(sizeof(struct point));
+    assert(p != NULL);
     p->x = x;
     p->y = y;
     add_node (list, &(p->node));
@@ -18,12 +21,13 @@ void add_point (struct intrusive_list * list, int x, int y) {
 
 
 void remove_point (struct intrusive_list * list, int x, int y) {
+    assert(list != NULL);
     struct intrusive_node * cur = list->head.next;
     while (cur) {
         struct point *  p = container_of (cur, struct point, node);
         if (p->x == x && p->y == y) {
             remove_node (list, &(p->node));
-            cur = cur->next;
+             cur = cur->next;
             free (p);
             continue;
         }
@@ -32,18 +36,15 @@ void remove_point (struct intrusive_list * list, int x, int y) {
 }
 
 void show_all_points (struct intrusive_list * list) {
+    assert(list != NULL);
     for (struct intrusive_node * cur = list->head.next; cur != NULL; cur = cur->next) {
         struct point * p = container_of (cur, struct point, node);
-        printf ("(");
-        printf ("%d", p->x);
-	printf(" ");
-        printf ("%d", p->y);
-	printf (")");
-        printf(" ");
+        printf ("(%d %d) ", p->x, p->y);
     }
 }
 
 void remove_all_points (struct intrusive_list * list) {
+    assert(list != NULL);
     struct intrusive_node * cur = list->head.next;
     while (cur) {
         struct point * p = container_of (cur, struct point, node);
