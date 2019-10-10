@@ -1,43 +1,49 @@
 #include "mergesort.h"
 #include <stdio.h>
 #include <malloc.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdlib.h>
+#include <stddef.h>
 
-void merge (int * arr, int left, int mid, int right, int (*comp) (const void *, const void *)/*, int arr_type*/) {
-    int it_1 = 0;
-    int it_2 = 0;
-    int i;
-    //if (arr_type == "int") int *arr = malloc((right - left) * sizeof(int));
-    //if (arr_type == "char") int * arr = malloc((right-left) * sizeof(char));
-    //if (arr_type == "str") int * arr = malloc((right-left) * sizeof(string));
-    int * res = malloc((right - left) * sizeof(int));
-    while (left + it_1 < mid && mid + it_2 < right) {
-        if (comp(arr+left + it_1, arr+mid + it_2) > 0) {
-            res [it_1 + it_2] = arr [left + it_1];
-            it_1++;
+void merge (void * arr, size_t elem, size_t elem_size, int (*comp) (const void *, const void *)) {
+    char * res = (char*)malloc(elem * elem_size);
+    char * mid = (char*)arr + (elem / 2) * elem_size;
+    char * right = (char*)arr + elem * elem_size;
+    char * I_left = arr;
+    char * I_right = mid;
+    while ((char*)I_left < (char*)mid && (char*)I_right < (char*)right) {
+        if (comp(I_left, I_right) > 0) {
+            memcpy (res, I_left, elem_size);
+            I_left += elem_size;
         } else {
-            res [it_1 + it_2] = arr [mid + it_2];
-            it_2++;
+            memcpy (res, I_right, elem_size);
+            I_right += elem_size;
         }
+        res += elem_size;
     }
-    while (left + it_1 < mid) {
-        res [it_1 + it_2] = arr [left + it_1];
-        it_1++;
+    while ((char*)I_left < (char*)mid) {
+        memcpy (res, I_left, elem_size);
+        I_left += elem_size;
+        res += elem_size;
     }
-    while (mid + it_2 < right) {
-        res [it_1 + it_2] = arr [mid + it_2];
-        it_2++;
+    while ((char*)I_right < (char*)right) {
+        memcpy (res, I_right, elem_size);
+        I_right += elem_size;
+        res += elem_size;
     }
-    for (i = 0; i <= it_1 + it_2; ++i) {
-        arr [left + i] = res [i];
+    res -= elem * elem_size;
+    for (size_t i = 0; i < elem * elem_size; i += elem_size) {
+        memcpy(arr + i, res + i, elem_size);
     }
     free (res);
 }
 
-void merge_sort (int * arr, int left, int right,  int (*comp) (const void *, const void *)) {
-    if (left + 1 >= right)
+void merge_sort (void * arr, size_t elem, size_t elem_size,  int (*comp) (const void *, const void *)) {
+    if (elem == 1)
     return;
-    int mid = (left + right) / 2;
-    merge_sort(arr, left, mid, comp);
-    merge_sort(arr, mid, right, comp);
-    merge(arr, left, mid, right, comp);
+    size_t mid = elem / 2;
+    merge_sort((char*) arr, mid, elem_size, comp);
+    merge_sort((char*) arr + mid * elem_size, elem - mid, elem_size, comp);
+    merge(arr, elem, elem_size, comp);
 }
