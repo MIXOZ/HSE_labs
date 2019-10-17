@@ -1,19 +1,23 @@
 #include "mergesort.h"
 #include <stdio.h>
-#include <malloc.h>
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdlib.h>
-#include <stddef.h>
 
 int comp_int (const void * a, const void * b) {
-    return *(const int*)a - *(const int*)b;
+    assert (a != NULL);
+    assert (b != NULL);
+    return *(const int*)b - *(const int*)a;
 }
 int comp_char (const void * a, const void * b) {
-    return *(const char*)a - *(const char*)b;
+    assert (a != NULL);
+    assert (b != NULL);
+    return *(const char*)b - *(const char*)a;
 }
 int comp_str (const void * a, const void * b) {
-    return strcmp(*(char**)a, *(char**)b);
+    assert (a != NULL);
+    assert (b != NULL);
+    return strcmp(*(char**)b, *(char**)a);
 }
 
 int main(int argc, char ** argv) {

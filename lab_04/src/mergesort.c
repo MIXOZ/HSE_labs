@@ -1,13 +1,12 @@
-#include "mergesort.h"
 #include <stdio.h>
-#include <malloc.h>
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdlib.h>
-#include <stddef.h>
 
 void merge (void * arr, size_t elem, size_t elem_size, int (*comp) (const void *, const void *)) {
+    assert (arr != NULL);
     char * res = (char*)malloc(elem * elem_size);
+    assert (res != NULL);
     char * mid = (char*)arr + (elem / 2) * elem_size;
     char * right = (char*)arr + elem * elem_size;
     char * I_left = arr;
@@ -40,8 +39,9 @@ void merge (void * arr, size_t elem, size_t elem_size, int (*comp) (const void *
 }
 
 void merge_sort (void * arr, size_t elem, size_t elem_size,  int (*comp) (const void *, const void *)) {
-    if (elem == 1)
-    return;
+    assert (arr != NULL);
+    if (elem <= 1)
+        return;
     size_t mid = elem / 2;
     merge_sort((char*) arr, mid, elem_size, comp);
     merge_sort((char*) arr + mid * elem_size, elem - mid, elem_size, comp);
