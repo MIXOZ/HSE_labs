@@ -1,18 +1,21 @@
 #include "point_list.h"
 #include "clist.h"
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-int main(int argcom, char ** argact) {
+int main(int argc, char **argcom) {
     intrusive_list list;
     intrusive_list* l = &list;
     init_list(l);
     int first;
-    int second;
-
-    (void) argcom;
-    (void) argact;
+    (void) argc;
     FILE *pok;
-    pok = fopen ("pok.txt", "r");
+    int second;
+    if (strcmp(argcom[1], "loadtext") == 0)
+        pok = fopen (argcom[2], "r");
+
+
     while (fscanf(pok, "%d %d", &first, &second) != EOF) {
         add_point(l, first, second);
     }
@@ -41,7 +44,7 @@ int main(int argcom, char ** argact) {
     //show_all_points(l);
 
     //remove_all_points(l);
-    apply (l, print_point_file, "(%d %d), ");
+    apply (l, print_point_file, argcom[4]);
 
 
     return 0;
