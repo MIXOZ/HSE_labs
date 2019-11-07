@@ -1,6 +1,7 @@
 #include "clist.h"
 #include "point_list.h"
 
+
 void init_list(intrusive_list *list) {
     intrusive_node *head = &list->head;
     head->next = head;
@@ -38,13 +39,3 @@ int get_length(intrusive_list *list) {
 
     return length;
 }
-
-void apply(intrusive_list *list, void (*op)(intrusive_node *node, void *data), void *data) {
-    intrusive_node *head = &list->head;
-    intrusive_node *node = head->next;
-    for (; node != head; node = node->next)
-        op(node, data);
-}
-
-
-

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
-
 #include "point_list.h"
 #include "clist.h"
 
@@ -59,17 +58,10 @@ void show_all_points(intrusive_list *list) {
         if (i) printf(" ");
         print_point(node);
     }
-
     printf("\n");
 }
 
 void remove_all_points(intrusive_list *list) {
     while (list->head.next != &list->head)
         delete_point(list, list->head.next);
-}
-
-void print_point_file (intrusive_node *node, void *data) {
-    char *format = data;
-    point_node *pnode = get_point(node);
-    printf (format, pnode->x, pnode->y);
 }

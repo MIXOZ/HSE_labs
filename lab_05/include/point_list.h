@@ -18,6 +18,4 @@ void show_all_points(intrusive_list *list);
 
 void remove_all_points(intrusive_list *list);
 
-void print_point_file (intrusive_node *, void *);
-
 #endif

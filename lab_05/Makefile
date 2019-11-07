@@ -1,7 +1,7 @@
 .PHONY: all clean
 
-CFLAGS=-Wall -Wextra -Werror -g -I include
-LDFLAGS=
+CFLAGS=-Wall -Wextra -Werror -fsanitize=address -g -I include
+LDFLAGS=-fsanitize=address
 
 all: lab_05
 obj: 

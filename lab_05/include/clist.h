@@ -1,6 +1,9 @@
 #ifndef CLIST_H_
 #define CLIST_H_
 
+
+extern int kol;
+
 typedef struct intrusive_node {
     struct intrusive_node *next;
     struct intrusive_node *prev;
@@ -16,8 +19,6 @@ void add_node(intrusive_list *, intrusive_node *);
 
 // contract: node != &list->head
 void remove_node(intrusive_list *, intrusive_node *);
-
-void apply(intrusive_list *, void (*)(intrusive_node *, void *), void *);
 
 int get_length(intrusive_list *);
 
