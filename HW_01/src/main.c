@@ -7,7 +7,7 @@
 
 
 int main(int argc, char *argcom[]) {
-    if (argc < 8) return 1;
+    if (argc != 8) return -1;
 
     //обработка данных командной строки
     char *crop_rotate = argcom[1];
@@ -17,42 +17,52 @@ int main(int argc, char *argcom[]) {
     int y = atoi(argcom[5]);
     int w = atoi(argcom[6]);
     int h = atoi(argcom[7]);
-    if (strcmp(crop_rotate, "crop-rotate") != 0) return 2;
+    if (strcmp(crop_rotate, "crop-rotate") != 0) return -1;
 
     //инициализация заголовков
     char header[54];
 
     //инициализация параметров
-    int biHeigth = 0;
+    int biHeight = 0;
     int biWidth = 0;
 
     //чтение файла
-    char **pix_arr = load_bmp (&biHeigth, &biWidth, header, in_bmp);
+    char **pix_arr = load_bmp (&biHeight, &biWidth, header, in_bmp);
+    if (pix_arr == NULL) return -1;
 
     //проверка корректности
-    if (x + w > biWidth || y + h > biHeigth) exit(3);
+    if (x + w > biWidth || y + h > biHeight) {
+        for (int i = 0; i < biHeight; ++i)
+            free(pix_arr[i]);
+        free(pix_arr);
+        return -1;
+    }
 
     //обработка пикселей
-    char **crop_arr = crop(pix_arr, x, y, w, h);
-    if (crop_arr == NULL) return 6;
-    if (pix_arr == NULL) return 6;
-    char **final_arr = rotate(crop_arr, w, h);
-    if (crop_arr == NULL) return 6;
-    if (final_arr == NULL) return 6;
+    char **crop_arr = crop(pix_arr, x, y, w, h, biHeight);
 
-    //запись
-    save_bmp (out_bmp, header, final_arr, w, h);
-    
-    for (int i = 0; i < biHeigth; ++i)
+    for (int i = 0; i < biHeight; ++i)
         free(pix_arr[i]);
     free(pix_arr);
+
+    if (crop_arr == NULL) return -1;
+
+    char **rotate_arr = rotate(crop_arr, w, h);
 
     for (int i = 0; i < h; ++i)
         free(crop_arr[i]);
     free(crop_arr);
 
+    if (rotate_arr == NULL) return -1;
+
+    //запись
+    int check = 0;
+    check = save_bmp (out_bmp, header, rotate_arr, w, h);
+    if (check == -1) return -1;
+    
     for (int i = 0; i < w ; ++i)
-        free(final_arr[i]);
-    free(final_arr);
+        free(rotate_arr[i]);
+    free(rotate_arr);
+    
     return 0;
 }
