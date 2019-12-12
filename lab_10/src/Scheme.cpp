@@ -8,22 +8,27 @@ Scheme::Scheme(int capacity) {
     for (int i = 0; i < capacity; ++i)
         figures_[i] = nullptr;
 }
+
+
 Scheme::~Scheme() {
     for (int i = 0; i < capacity_; ++i)
         delete figures_[i];
     delete[] figures_;
 }
 
+
 void Scheme::push_back_figure(Figure* fg) {
     figures_[size_] = fg;
     size_++;
 }
+
+
 void Scheme::remove_figure(int id) {
     int i = 0;
     while (figures_[i]->return_id() != id && i <= size_) {
         ++i;
     }
-    //удалить
+    delete figures_[i];
     while (figures_[i] != nullptr && i <= size_ - 1) {
         figures_[i] = figures_[i + 1];
         ++i;

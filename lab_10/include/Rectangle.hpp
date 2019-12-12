@@ -1,4 +1,4 @@
-stat#include "Figure.hpp"
+#include "Figure.hpp"
 
 
 class Rectangle : public Figure {
