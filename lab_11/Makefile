@@ -1,6 +1,6 @@
 INC = -Iinclude
-FLAGS = -std=c++17 -Wall -Wextra 
-CC = g++
+FLAGS = -std=c++17 -Wall -Wextra -fsanitize=address
+CC = g++ -fsanitize=address
 
 .PHONY: all clean
 

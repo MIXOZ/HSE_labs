@@ -4,12 +4,10 @@
 #include <employees.hpp>
 
 void load_employees(EmployeesArray &arr, std::string &file_name) {
-	EmployeesArray new_arr;
 	std::ifstream in;
 	in.open(file_name, std::ios::binary);
-	in >> new_arr;
+	arr.add_self_in_array(in);
 	in.close();
-	new_arr.add_self_in_array(arr);
 }
 
 void save_employees(EmployeesArray &arr, std::string &file_name) {
