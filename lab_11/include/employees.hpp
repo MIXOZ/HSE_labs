@@ -75,9 +75,9 @@ private:
   int32_t _total_salary = 0;
 };
 
-std::ostream &operator <<(std::ostream &out, EmployeesArray &data);
+std::ostream &operator <<(std::ostream &out, EmployeesArray const &data);
 
-std::ofstream &operator <<(std::ofstream &out, EmployeesArray &data);
+std::ofstream &operator <<(std::ofstream &out, EmployeesArray const &data);
 
 std::ifstream &operator >>(std::ifstream &in, EmployeesArray &data);
 

@@ -149,12 +149,12 @@ void EmployeesArray::add_self_in_array(std::ifstream &in) {
   }
 }
 
-std::ostream &operator <<(std::ostream &out, EmployeesArray &data) {
+std::ostream &operator <<(std::ostream &out, EmployeesArray const &data) {
     data.write_out(out);
     return out;
 }
 
-std::ofstream &operator <<(std::ofstream &out, EmployeesArray &data) {
+std::ofstream &operator <<(std::ofstream &out, EmployeesArray const &data) {
     data.write_out_file(out);
     return out;
 }
