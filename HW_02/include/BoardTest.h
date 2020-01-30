@@ -8,6 +8,8 @@ protected:
         Сообщает об результате пользователю, в случае неудачи подробно сообщает об источнике. */
     static void check(bool expr, const char *func, const char  *filename, size_t lineNum); 
 
+#define  DO_CHECK(EXPR) check(EXPR, __func__, __FILE__, __LINE__);
+
 public:
     /** Вызывается один раз в конце автотестов, выводит общую статистику по
         пройденным тестам на экран. Возвращает `true` если и только если

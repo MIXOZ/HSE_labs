@@ -14,6 +14,7 @@ bool Board::canMove(int x, int y) {
 void Board::move(int x, int y) {
     field[x][y] = return_side_field();
     empty_cells--;
+    change_side();
 }
 
 /** Проверка на окончание игры. */
@@ -40,7 +41,7 @@ state Board::is_victory(int x, int y, Field side) {
 
 /** Состояние игры: игра идёт, игра кончилась с одним из результатов: ничья, победа одной из сторон. */
 state Board::getState(int x, int y){
-    if (is_victory(x, y, return_side_field()) == WIN) return WIN;
+    if (is_victory(x, y, return_last_side_field()) == WIN) return WIN;
     if (empty_cells == 0) return DRAW;
     return CONTINUE;
 }
@@ -50,6 +51,12 @@ void Board::change_side() {
 }
 
 Field Board::return_side_field(){
+    if (side) return Field::O;
+    else return Field::X;
+}
+
+
+Field Board::return_last_side_field(){
     if (side) return Field::X;
     else return Field::O;
 }
@@ -74,10 +81,11 @@ void StdioBoardView::runGame() {
     engine.feel_field();
     if (silent)
         view.print_field(&engine);
-    engine.change_side();
+    
     view.print_game_line(engine.return_side_player());
-    engine.change_side();
+    //engine.change_side();
     std::cin >> x >> y;
+
     while (x != -1 && y != -1) {
         input_processing(x, y);
         state current_state = engine.getState(x, y);
@@ -90,7 +98,6 @@ void StdioBoardView::runGame() {
             return;
         }
         std::cin >> x >> y;
-        engine.change_side();
     }
 }
 
@@ -103,7 +110,6 @@ void StdioBoardView::input_processing(int x, int y) {
             view.print_field(&engine);
     } else {
         view.print_error();
-        engine.change_side();
     }
 }
 

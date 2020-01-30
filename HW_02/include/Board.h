@@ -33,6 +33,7 @@ public:
     state getState(int x, int y);
     void change_side();
     Field return_side_field();
+    Field return_last_side_field();
     Field field[10][10];
     void feel_field();
     Player return_side_player();

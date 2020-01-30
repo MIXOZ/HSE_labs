@@ -2,11 +2,11 @@ class BoardTest : public Test {
 private:
     void testIsWin() {
         Board b;
-        b.move(0, 0, 1);
-        b.move(0, 1, 1);
-        b.move(1, 0, 1);
-        b.move(4, 5, 0);
-        b.move(5, 5, 0);
+        b.move(0, 0);
+        b.move(0, 1);
+        b.move(1, 0);
+        b.move(4, 5);
+        b.move(5, 5);
         DO_CHECK(b.is_victory() == CONTINUE);
     }
     

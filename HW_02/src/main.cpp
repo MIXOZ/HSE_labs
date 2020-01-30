@@ -5,7 +5,7 @@
 
 
 int main(int argc, char* argv[]) {
-	bool flag = false;
+	bool flag = true;
 	Board q;
 	if (argc > 1)
 		flag = strcmp(argv[1], "silent");
