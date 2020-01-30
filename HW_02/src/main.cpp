@@ -1,9 +1,10 @@
 #include <stdint.h>
 #include <iostream>
 #include <Board.h>
+#include <cstring>
 
 
-int main(/*int argc, char* argv[]*/) {
+int main(int argc, char* argv[]) {
     /*test_map tests;
     init_test_map(tests);
 
@@ -17,8 +18,11 @@ int main(/*int argc, char* argv[]*/) {
 
     std::cout << "OK" << std::endl;
 	*/
+	bool flag = false;
 	Board q;
-	StdioBoardView a(q);
+	if (argc > 1)
+		flag = strcmp(argv[1], "silent");
+	StdioBoardView a(q, flag);
 	a.runGame();
 	
 

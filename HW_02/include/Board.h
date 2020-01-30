@@ -12,17 +12,30 @@ enum state{
 };
 
 
+enum class Player{
+    X = 'X',
+    O = 'O'
+};
+
+
+enum class Field{
+    NONE = '.',
+    X = 'X',
+    O = 'O'
+};
+
+
 class Board {
 public:                                  
     bool canMove(int x, int y);
     void move(int x, int y);
-    bool is_victory(int x, int y, char side);
+    state is_victory(int x, int y, Field side);
     state getState(int x, int y);
     void change_side();
-    char return_side();
-    char field[10][10];
+    Field return_side_field();
+    Field field[10][10];
     void feel_field();
-    char return_other_side();
+    Player return_side_player();
 private: 
     int empty_cells = 100;
     bool side = false;
@@ -34,8 +47,8 @@ class BoardView {
 public:
     void print_field(Board *engine);
 
-    void print_game_line(char side);
-    void print_win(char side);
+    void print_game_line(Player side);
+    void print_win(Field side);
 
     void print_draw();
 
@@ -46,13 +59,14 @@ public:
 
 class StdioBoardView {
 public:
-    StdioBoardView(Board &board) : engine(board){};
+    StdioBoardView(Board &board, bool &flag) : engine(board), silent(flag){};
     void runGame();
     void input_processing(int x, int y);
     //~StdioBoardView();
 private:
     Board &engine;
     BoardView view;
+    bool silent;
     int x;
     int y;
 };
