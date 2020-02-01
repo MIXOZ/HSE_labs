@@ -41,9 +41,8 @@ state Board::is_victory(int x, int y, Field side) {
 
 /** Состояние игры: игра идёт, игра кончилась с одним из результатов: ничья, победа одной из сторон. */
 state Board::getState(int x, int y){
-    if (is_victory(x, y, return_last_side_field()) == WIN) return WIN;
     if (empty_cells == 0) return DRAW;
-    return CONTINUE;
+    return is_victory(x, y, return_last_side_field());
 }
 
 void Board::change_side() {
@@ -66,7 +65,7 @@ Player Board::return_side_player(){
     else return Player::X;
 }
 
-void Board::feel_field() {
+Board::Board() {
     for (size_t i = 0; i < 10; ++i) 
         for (size_t j = 0; j < 10; ++j ) 
             field[i][j] = Field::NONE;
@@ -78,12 +77,10 @@ void Board::feel_field() {
 
 /** Основной цикл игры, от начала до конца. */
 void StdioBoardView::runGame() {
-    engine.feel_field();
     if (silent)
         view.print_field(&engine);
     
     view.print_game_line(engine.return_side_player());
-    //engine.change_side();
     std::cin >> x >> y;
 
     while (x != -1 && y != -1) {
@@ -91,7 +88,7 @@ void StdioBoardView::runGame() {
         state current_state = engine.getState(x, y);
         if (current_state == CONTINUE) view.print_game_line(engine.return_side_player());
         else if (current_state == WIN) {
-            view.print_win(engine.return_side_field());
+            view.print_win(engine.return_last_side_field());
             return;
         } else if (current_state == DRAW) {
             view.print_draw();

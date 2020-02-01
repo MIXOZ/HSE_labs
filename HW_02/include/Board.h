@@ -1,24 +1,24 @@
 #ifndef HW_02_BOARD_H_INCLUDED
 #define HW_02_BOARD_H_INCLUDED
 
-
 #include <stdint.h>
 #include <iostream>
 
-enum state{
+
+enum state {
     CONTINUE,
     DRAW,
     WIN
 };
 
 
-enum class Player{
+enum class Player {
     X = 'X',
     O = 'O'
 };
 
 
-enum class Field{
+enum class Field {
     NONE = '.',
     X = 'X',
     O = 'O'
@@ -26,7 +26,8 @@ enum class Field{
 
 
 class Board {
-public:                                  
+public:              
+    Board();                    
     bool canMove(int x, int y);
     void move(int x, int y);
     state is_victory(int x, int y, Field side);
@@ -35,7 +36,6 @@ public:
     Field return_side_field();
     Field return_last_side_field();
     Field field[10][10];
-    void feel_field();
     Player return_side_player();
 private: 
     int empty_cells = 100;
@@ -43,19 +43,14 @@ private:
 };
 
 
-
 class BoardView {
 public:
     void print_field(Board *engine);
-
     void print_game_line(Player side);
     void print_win(Field side);
-
     void print_draw();
-
     void print_error();
 };
-
 
 
 class StdioBoardView {
@@ -63,7 +58,6 @@ public:
     StdioBoardView(Board &board, bool &flag) : engine(board), silent(flag){};
     void runGame();
     void input_processing(int x, int y);
-    //~StdioBoardView();
 private:
     Board &engine;
     BoardView view;

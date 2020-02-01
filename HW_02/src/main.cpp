@@ -11,7 +11,5 @@ int main(int argc, char* argv[]) {
 		flag = strcmp(argv[1], "silent");
 	StdioBoardView a(q, flag);
 	a.runGame();
-	
-
     return 0;
 }
