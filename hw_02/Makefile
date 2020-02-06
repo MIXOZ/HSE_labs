@@ -4,21 +4,21 @@ CC = g++
 
 .PHONY: all clean
 
-all: tests HW_02
+all: test_HW_02 HW_02
 
 HW_02: obj/Board.o obj/main.o | obj
 	$(CC) $(INC) -o HW_02 $(FLAGS) obj/Board.o obj/main.o
 
-tests: obj/Board.o obj/Test.o obj/BoardTest.o | obj
-	$(CC) $(INC) -o tests $(FLAGS) obj/Board.o obj/BoardTest.o obj/Test.o
+test_HW_02: obj/Board.o obj/Test.o obj/BoardTest.o | obj
+	$(CC) $(INC) -o test_HW_02 $(FLAGS) obj/Board.o obj/BoardTest.o obj/Test.o
 
-obj/BoardTest.o: test/BoardTest.cpp | obj
+obj/BoardTest.o: test/BoardTest.cpp include/BoardTest.h | obj
 	$(CC) $(INC) -c $(FLAGS) test/BoardTest.cpp -o obj/BoardTest.o
 
 obj/Test.o: test/Test.cpp | obj
 	$(CC) $(INC) -c $(FLAGS) test/Test.cpp -o obj/Test.o
 
-obj/Board.o: src/Board.cpp | obj
+obj/Board.o: src/Board.cpp include/Board.h | obj
 	$(CC) $(INC) -c $(FLAGS) src/Board.cpp -o obj/Board.o
 
 obj/main.o: src/main.cpp | obj
@@ -28,4 +28,4 @@ obj:
 	mkdir obj
 
 clean:
-	rm -rf obj HW_02 tests
+	rm -rf obj HW_02 test_HW_02 

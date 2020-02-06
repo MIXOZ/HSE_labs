@@ -24,7 +24,7 @@ void BoardTest::testIsWin1() {
     b.move(1, 0);
     b.move(4, 5);
     b.move(5, 5);
-    DO_CHECK(b.is_victory(4, 5, Field::X) == CONTINUE);
+    DO_CHECK(b.is_victory(4, 5, Field::O) == CONTINUE);
 }
     
 
@@ -39,7 +39,7 @@ void BoardTest::testIsWin2() {
     b.move(0, 3);
     b.move(1, 3);
     b.move(0, 4);
-    DO_CHECK(b.is_victory(0, 4, Field::X) == WIN);
+    DO_CHECK(b.is_victory(0, 4, Field::O) == WIN);
 }
 
 
@@ -54,7 +54,7 @@ void BoardTest::testIsWin3() {
     b.move(3, 0);
     b.move(3, 1);
     b.move(4, 0);
-    DO_CHECK(b.is_victory(4, 0, Field::X) == WIN);
+    DO_CHECK(b.is_victory(4, 0, Field::O) == WIN);
 }
 
 
@@ -69,7 +69,7 @@ void BoardTest::testIsWin4() {
     b.move(3, 3);
     b.move(3, 1);
     b.move(4, 4);
-    DO_CHECK(b.is_victory(4, 4, Field::X) == WIN);
+    DO_CHECK(b.is_victory(4, 4, Field::O) == WIN);
 }
 
 
@@ -85,7 +85,7 @@ void BoardTest::testIsWin5() {
     b.move(6, 3);
     b.move(4, 4);
     b.move(5, 4);
-    DO_CHECK(b.is_victory(5, 4, Field::O) == WIN);
+    DO_CHECK(b.is_victory(5, 4, Field::X) == WIN);
 }
     
 

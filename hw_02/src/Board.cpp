@@ -1,6 +1,8 @@
 #include <stdint.h>
+#include <sstream>
 #include <iostream>
 #include <Board.h>
+#include <vector>
 
 
 /**------------------Board-------------------*/
@@ -9,6 +11,11 @@
 bool Board::canMove(int x, int y) {
     return (field[x][y] == Field::NONE && x < 10 && y < 10 && x >= 0 && y >= 0);   
 }
+
+std::vector<std::vector<Field>> Board::get_field() {
+    return field;
+}
+
 
 /** Сделать ход. UB, если он некорректен. */
 void Board::move(int x, int y) {
@@ -66,23 +73,38 @@ Player Board::return_side_player(){
 }
 
 Board::Board() {
-    for (size_t i = 0; i < 10; ++i) 
+    field.resize(10);
+    for (size_t i = 0; i < 10; ++i) {
+        field[i].resize(10);
         for (size_t j = 0; j < 10; ++j ) 
             field[i][j] = Field::NONE;
+    }
 }
 
 
 /**---------------StdioBoardView----------------*/
 
+ bool StdioBoardView::get_coor() {
+    std::string buf;
+    std::getline (std::cin, buf);
+    std::stringstream buffer(buf);
+    x = -2;
+    y = -2;
+    buffer >> x >> y;
+    char symbol = ' ';
+    while (symbol == ' ') {
+        if (buffer.eof()) return true;
+        buffer >> symbol;
+    }
+    return false;
+ }
 
 /** Основной цикл игры, от начала до конца. */
 void StdioBoardView::runGame() {
     if (silent)
         view.print_field(&engine);
-    
     view.print_game_line(engine.return_side_player());
-    std::cin >> x >> y;
-
+    if (!get_coor()) view.print_error();
     while (x != -1 && y != -1) {
         input_processing(x, y);
         state current_state = engine.getState(x, y);
@@ -94,7 +116,7 @@ void StdioBoardView::runGame() {
             view.print_draw();
             return;
         }
-        std::cin >> x >> y;
+        while (!get_coor()) view.print_error();
     }
 }
 
@@ -113,11 +135,11 @@ void StdioBoardView::input_processing(int x, int y) {
 void BoardView::print_field(Board *engine) {
     for (size_t i = 0; i < 10; ++i) {
         for (size_t j = 0; j < 10; ++j ) {
-            if (engine->field[i][j] == Field::X)
+            if (engine->get_field()[i][j] == Field::X)
                 std::cout << 'X';
-            else if (engine->field[i][j] == Field::O)
+            else if (engine->get_field()[i][j] == Field::O)
                 std::cout << 'O';
-            else if (engine->field[i][j] == Field::NONE)
+            else if (engine->get_field()[i][j] == Field::NONE)
                 std::cout << '.';
         }
         std::cout << "\n";

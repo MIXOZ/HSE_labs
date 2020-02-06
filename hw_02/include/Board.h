@@ -1,8 +1,9 @@
 #ifndef HW_02_BOARD_H_INCLUDED
 #define HW_02_BOARD_H_INCLUDED
 
-#include <stdint.h>
-#include <iostream>
+#include <cstdint>
+#include <vector>
+
 
 
 enum state {
@@ -30,16 +31,17 @@ public:
     Board();                    
     bool canMove(int x, int y);
     void move(int x, int y);
-    state is_victory(int x, int y, Field side);
     state getState(int x, int y);
-    void change_side();
     Field return_side_field();
     Field return_last_side_field();
-    Field field[10][10];
     Player return_side_player();
+    std::vector<std::vector<Field>> get_field();
 private: 
     int empty_cells = 100;
-    bool side = false;
+    bool side = true;
+    state is_victory(int x, int y, Field side);
+    std::vector<std::vector<Field>> field;
+    void change_side();
 };
 
 
@@ -56,6 +58,7 @@ public:
 class StdioBoardView {
 public:
     StdioBoardView(Board &board, bool &flag) : engine(board), silent(flag){};
+    bool get_coor();
     void runGame();
     void input_processing(int x, int y);
 private:
