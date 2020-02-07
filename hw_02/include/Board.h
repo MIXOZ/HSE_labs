@@ -4,9 +4,13 @@
 #include <cstdint>
 #include <vector>
 
+const int MAX_VALUE = 10;
+const int MIN_VALUE = 0;
+const int WIN_VALUE = 4;
+const int EXIT_VALUE = -1;
+const int ERROR_VALUE = -2;
 
-
-enum state {
+enum State {
     CONTINUE,
     DRAW,
     WIN
@@ -29,17 +33,17 @@ enum class Field {
 class Board {
 public:              
     Board();                    
-    bool canMove(int x, int y);
+    bool can_move(int x, int y);
     void move(int x, int y);
-    state getState(int x, int y);
+    State get_state(int x, int y);
     Field return_side_field();
     Field return_last_side_field();
     Player return_side_player();
     std::vector<std::vector<Field>> get_field();
+    State is_victory(int x, int y, Field side);
 private: 
     int empty_cells = 100;
-    bool side = true;
-    state is_victory(int x, int y, Field side);
+    Field side = Field::O;
     std::vector<std::vector<Field>> field;
     void change_side();
 };
@@ -58,15 +62,13 @@ public:
 class StdioBoardView {
 public:
     StdioBoardView(Board &board, bool &flag) : engine(board), silent(flag){};
-    bool get_coor();
-    void runGame();
+    bool get_coor(int &x, int &y);
+    void run_game();
     void input_processing(int x, int y);
 private:
     Board &engine;
     BoardView view;
     bool silent;
-    int x;
-    int y;
 };
 
 

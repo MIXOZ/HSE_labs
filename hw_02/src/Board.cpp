@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include <sstream>
 #include <iostream>
 #include <Board.h>
@@ -8,8 +7,8 @@
 /**------------------Board-------------------*/
 
 /** Проверить ход на корректность, если бы он был следующим. */
-bool Board::canMove(int x, int y) {
-    return (field[x][y] == Field::NONE && x < 10 && y < 10 && x >= 0 && y >= 0);   
+bool Board::can_move(int x, int y) {
+    return (x < MAX_VALUE && y < MAX_VALUE && x >= MIN_VALUE && y >= MIN_VALUE && field[x][y] == Field::NONE);   
 }
 
 std::vector<std::vector<Field>> Board::get_field() {
@@ -26,57 +25,58 @@ void Board::move(int x, int y) {
 
 /** Проверка на окончание игры. */
 
-state Board::is_victory(int x, int y, Field side) {
-    int delta_x_arr[4] = {-1, 0, 1, 1};
-    int delta_y_arr[4] = {1, 1, 0, 1};
-    for (int itr = 0; itr < 4; ++itr) {
+State Board::is_victory(int x, int y, Field side) {
+    int delta_x_arr[WIN_VALUE] = {-1, 0, 1, 1};
+    int delta_y_arr[WIN_VALUE] = {1, 1, 0, 1};
+    for (int itr = MIN_VALUE; itr < WIN_VALUE; ++itr) {
         int i = x;
         int j = y;
-        int k = -1;
-        while (i >= 0 && j >= 0 && i < 10 && j < 10)
+        int k = EXIT_VALUE;
+        while (i >= MIN_VALUE && j >= MIN_VALUE && i < MAX_VALUE && j < MAX_VALUE)
             if (field[i][j] == side) {k++; i -= delta_x_arr[itr]; j -= delta_y_arr[itr];}
             else break;
         i = x;
         j = y;
-        while (i < 10 && j < 10 && i >= 0 && j >= 0)
+        while (i < MAX_VALUE && j < MAX_VALUE && i >= MIN_VALUE && j >= MIN_VALUE)
             if (field[i][j] == side) {k++; i += delta_x_arr[itr]; j += delta_y_arr[itr];}
             else break;
-        if (k >= 5) return WIN;
+        if (k > WIN_VALUE) return WIN;
     }
     return CONTINUE;
 }
 
 /** Состояние игры: игра идёт, игра кончилась с одним из результатов: ничья, победа одной из сторон. */
-state Board::getState(int x, int y){
-    if (empty_cells == 0) return DRAW;
+State Board::get_state(int x, int y){
+    if (empty_cells == MIN_VALUE) return DRAW;
     return is_victory(x, y, return_last_side_field());
 }
 
 void Board::change_side() {
-    side = !side;
+    if (side == Field::O) side = Field::X;
+    else side = Field::O;
 }
 
+
 Field Board::return_side_field(){
-    if (side) return Field::O;
-    else return Field::X;
+    return side;
 }
 
 
 Field Board::return_last_side_field(){
-    if (side) return Field::X;
+    if (side == Field::O) return Field::X;
     else return Field::O;
 }
 
 Player Board::return_side_player(){
-    if (side) return Player::O;
+    if (side == Field::O) return Player::O;
     else return Player::X;
 }
 
 Board::Board() {
-    field.resize(10);
-    for (size_t i = 0; i < 10; ++i) {
-        field[i].resize(10);
-        for (size_t j = 0; j < 10; ++j ) 
+    field.resize(MAX_VALUE);
+    for (size_t i = MIN_VALUE; i < MAX_VALUE; ++i) {
+        field[i].resize(MAX_VALUE);
+        for (size_t j = MIN_VALUE; j < MAX_VALUE; ++j ) 
             field[i][j] = Field::NONE;
     }
 }
@@ -84,12 +84,12 @@ Board::Board() {
 
 /**---------------StdioBoardView----------------*/
 
- bool StdioBoardView::get_coor() {
+ bool StdioBoardView::get_coor(int &x, int &y) {
     std::string buf;
     std::getline (std::cin, buf);
     std::stringstream buffer(buf);
-    x = -2;
-    y = -2;
+    x = ERROR_VALUE;
+    y = ERROR_VALUE;
     buffer >> x >> y;
     char symbol = ' ';
     while (symbol == ' ') {
@@ -100,30 +100,35 @@ Board::Board() {
  }
 
 /** Основной цикл игры, от начала до конца. */
-void StdioBoardView::runGame() {
+void StdioBoardView::run_game() {
+    int x = ERROR_VALUE;
+    int y = ERROR_VALUE;
     if (silent)
         view.print_field(&engine);
     view.print_game_line(engine.return_side_player());
-    if (!get_coor()) view.print_error();
-    while (x != -1 && y != -1) {
+    while (!get_coor(x, y)) view.print_error();
+    while (x != EXIT_VALUE && y != EXIT_VALUE) {
         input_processing(x, y);
-        state current_state = engine.getState(x, y);
+        State current_state = engine.get_state(x, y);
         if (current_state == CONTINUE) view.print_game_line(engine.return_side_player());
-        else if (current_state == WIN) {
-            view.print_win(engine.return_last_side_field());
-            return;
-        } else if (current_state == DRAW) {
-            view.print_draw();
-            return;
+        else {
+            if (!silent) view.print_field(&engine);
+            if (current_state == WIN) {
+                view.print_win(engine.return_last_side_field());
+                return;
+            } else if (current_state == DRAW) {
+                view.print_draw();
+                return;
+            }
         }
-        while (!get_coor()) view.print_error();
+        while (!get_coor(x, y)) view.print_error();
     }
 }
 
 // Можно добавлять методы при необходимости.
 
 void StdioBoardView::input_processing(int x, int y) {
-    if (engine.canMove(x, y)) { 
+    if (engine.can_move(x, y)) { 
         engine.move(x, y); 
         if (silent)
             view.print_field(&engine);
@@ -133,8 +138,8 @@ void StdioBoardView::input_processing(int x, int y) {
 }
 
 void BoardView::print_field(Board *engine) {
-    for (size_t i = 0; i < 10; ++i) {
-        for (size_t j = 0; j < 10; ++j ) {
+    for (size_t i = MIN_VALUE; i < MAX_VALUE; ++i) {
+        for (size_t j = MIN_VALUE; j < MAX_VALUE; ++j ) {
             if (engine->get_field()[i][j] == Field::X)
                 std::cout << 'X';
             else if (engine->get_field()[i][j] == Field::O)

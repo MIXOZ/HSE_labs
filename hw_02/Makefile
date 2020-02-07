@@ -15,7 +15,7 @@ test_HW_02: obj/Board.o obj/Test.o obj/BoardTest.o | obj
 obj/BoardTest.o: test/BoardTest.cpp include/BoardTest.h | obj
 	$(CC) $(INC) -c $(FLAGS) test/BoardTest.cpp -o obj/BoardTest.o
 
-obj/Test.o: test/Test.cpp | obj
+obj/Test.o: test/Test.cpp include/Test.h| obj
 	$(CC) $(INC) -c $(FLAGS) test/Test.cpp -o obj/Test.o
 
 obj/Board.o: src/Board.cpp include/Board.h | obj

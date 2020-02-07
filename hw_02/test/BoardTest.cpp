@@ -4,20 +4,9 @@
 #include <cstring>
 #include <BoardTest.h>
 #include <Board.h>
-#include <cstring>
+#include <Test.h>
 
-
-void Test::check(bool expr, const char *func, const char  *filename, size_t lineNum) {
-    if (!expr) {
-        std::cout << "Error in function: " << func 
-                  << ", in file: " << filename << ", in line: " << lineNum << "\n";
-        failedNum++;
-    }
-    totalNum++;
-}
-
-
-void BoardTest::testIsWin1() {
+void BoardTest::test_is_win1() {
     Board b;
     b.move(0, 0);
     b.move(0, 1);
@@ -28,7 +17,7 @@ void BoardTest::testIsWin1() {
 }
     
 
-void BoardTest::testIsWin2() {
+void BoardTest::test_is_win2() {
     Board b;
     b.move(0, 0);
     b.move(1, 0);
@@ -43,7 +32,7 @@ void BoardTest::testIsWin2() {
 }
 
 
-void BoardTest::testIsWin3() {
+void BoardTest::test_is_win3() {
     Board b;
     b.move(0, 0);
     b.move(0, 1);
@@ -58,7 +47,7 @@ void BoardTest::testIsWin3() {
 }
 
 
-void BoardTest::testIsWin4() {
+void BoardTest::test_is_win4() {
     Board b;
     b.move(0, 0);
     b.move(0, 1);
@@ -73,7 +62,7 @@ void BoardTest::testIsWin4() {
 }
 
 
-void BoardTest::testIsWin5() {
+void BoardTest::test_is_win5() {
     Board b;
     b.move(0, 0);
     b.move(9, 0);
@@ -89,7 +78,7 @@ void BoardTest::testIsWin5() {
 }
     
 
-void BoardTest::testIsDraw() {
+void BoardTest::test_is_draw() {
     Board b;
     for (int i = 0; i < 4; ++i) {
         b.move(i, 0);
@@ -127,52 +116,42 @@ void BoardTest::testIsDraw() {
         b.move(i, 8);
         b.move(i, 9);
     }
-    DO_CHECK(b.getState(9, 9) == DRAW);
+    DO_CHECK(b.get_state(9, 9) == DRAW);
 }
 
 
-void BoardTest::testMove1() {
+void BoardTest::test_move1() {
     Board b;
     b.move(0, 0);
-    DO_CHECK(!b.canMove(0, 0));
+    DO_CHECK(!b.can_move(0, 0));
 }
     
-void BoardTest::testMove2() {
+void BoardTest::test_move2() {
     Board m;
     m.move(0, 0);
-    DO_CHECK(m.canMove(9, 9));
+    DO_CHECK(m.can_move(9, 9));
 }
 
 
-void BoardTest::testMove3() {
+void BoardTest::test_move3() {
     Board m;
     m.move(0, 1);
     m.move(1, 0);
     m.move(3, 5);
     m.move(4, 4);
-    DO_CHECK(m.canMove(5, 3));
+    DO_CHECK(m.can_move(5, 3));
 }
 
 
-void BoardTest::runAllTests() {
-    testIsWin1();
-    testIsWin2();
-    testIsWin3();
-    testIsWin4();
-    testIsWin5();
-    testIsDraw();
-    testMove1();
-    testMove2();
-    testMove3();
+void BoardTest::run_all_tests() {
+    test_is_win1();
+    test_is_win2();
+    test_is_win3();
+    test_is_win4();
+    test_is_win5();
+    test_is_draw();
+    test_move1();
+    test_move2();
+    test_move3();
 }
 
-
-bool BoardTest::showFinalResult() {
-    if (failedNum == 1) {
-        std::cout << failedNum << " test failed from " << totalNum << "\n";
-        return false;   
-    }
-    std::cout << failedNum << " tests failed from " << totalNum << "\n";
-    if (!failedNum) return false;
-    return true;
-}
