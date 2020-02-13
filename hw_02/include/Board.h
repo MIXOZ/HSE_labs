@@ -1,7 +1,6 @@
 #ifndef HW_02_BOARD_H_INCLUDED
 #define HW_02_BOARD_H_INCLUDED
 
-#include <cstdint>
 #include <vector>
 
 const int MAX_VALUE = 10;
@@ -9,6 +8,7 @@ const int MIN_VALUE = 0;
 const int WIN_VALUE = 4;
 const int EXIT_VALUE = -1;
 const int ERROR_VALUE = -2;
+const int FULL_FIELD = 100;
 
 enum State {
     CONTINUE,
@@ -39,10 +39,10 @@ public:
     Field return_side_field();
     Field return_last_side_field();
     Player return_side_player();
-    std::vector<std::vector<Field>> get_field();
+    Field get_cell(int x, int y);
     State is_victory(int x, int y, Field side);
 private: 
-    int empty_cells = 100;
+    int empty_cells = FULL_FIELD;
     Field side = Field::O;
     std::vector<std::vector<Field>> field;
     void change_side();
@@ -71,5 +71,9 @@ private:
     bool silent;
 };
 
+
+std::ostream& operator <<(std::ostream &out, Player const side);
+
+std::ostream& operator <<(std::ostream &out, Field const side);
 
 #endif

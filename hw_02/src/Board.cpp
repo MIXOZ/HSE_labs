@@ -11,8 +11,8 @@ bool Board::can_move(int x, int y) {
     return (x < MAX_VALUE && y < MAX_VALUE && x >= MIN_VALUE && y >= MIN_VALUE && field[x][y] == Field::NONE);   
 }
 
-std::vector<std::vector<Field>> Board::get_field() {
-    return field;
+Field Board::get_cell(int x, int y) {
+    return field[x][y];
 }
 
 
@@ -47,7 +47,8 @@ State Board::is_victory(int x, int y, Field side) {
 
 /** Состояние игры: игра идёт, игра кончилась с одним из результатов: ничья, победа одной из сторон. */
 State Board::get_state(int x, int y){
-    if (empty_cells == MIN_VALUE) return DRAW;
+    if (is_victory(x, y, return_last_side_field()) == CONTINUE)
+        if (empty_cells == MIN_VALUE) return DRAW;
     return is_victory(x, y, return_last_side_field());
 }
 
@@ -90,7 +91,10 @@ Board::Board() {
     std::stringstream buffer(buf);
     x = ERROR_VALUE;
     y = ERROR_VALUE;
-    buffer >> x >> y;
+    buffer >> x;
+    if (buffer.fail()) return false;
+    buffer >> y;
+    if (buffer.fail()) return false;
     char symbol = ' ';
     while (symbol == ' ') {
         if (buffer.eof()) return true;
@@ -138,31 +142,21 @@ void StdioBoardView::input_processing(int x, int y) {
 }
 
 void BoardView::print_field(Board *engine) {
+    std::cout << "\n";
     for (size_t i = MIN_VALUE; i < MAX_VALUE; ++i) {
         for (size_t j = MIN_VALUE; j < MAX_VALUE; ++j ) {
-            if (engine->get_field()[i][j] == Field::X)
-                std::cout << 'X';
-            else if (engine->get_field()[i][j] == Field::O)
-                std::cout << 'O';
-            else if (engine->get_field()[i][j] == Field::NONE)
-                std::cout << '.';
+            std::cout << engine->get_cell(i, j);
         }
         std::cout << "\n";
     }
 }
 
 void BoardView::print_game_line(Player side) {
-    if (side == Player::X)
-        std::cout << 'X' << " move:\n";
-    else if (side == Player::O)
-        std::cout << 'O' << " move:\n";
+    std::cout << side << " move: \n";
 }
 
 void BoardView::print_win(Field side) {
-    if (side == Field::X)
-        std::cout << 'X' << " wins!\n";
-    else if (side == Field::O)
-        std::cout << 'O' << " wins!\n";
+    std::cout << side << " wins!\n";
 }
 
 void BoardView::print_draw() {
@@ -171,4 +165,22 @@ void BoardView::print_draw() {
 
 void BoardView::print_error() {
     std::cout << "Bad move!\n";
+}
+
+std::ostream& operator <<(std::ostream &out, Field const side) {
+    if (side == Field::X)
+        std::cout << 'X';
+    else if (side == Field::O)
+        std::cout << 'O';
+    else if (side == Field::NONE)
+        std::cout << '.';
+    return out;
+}
+
+std::ostream& operator <<(std::ostream &out, Player const side) {
+    if (side == Player::X)
+        std::cout << 'X';
+    else if (side == Player::O)
+        std::cout << 'O';
+    return out;
 }

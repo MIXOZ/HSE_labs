@@ -2,8 +2,8 @@
 #define HW_02_BOARD_TEST_H_INCLUDED
 
 
-#include <Board.h>
 #include <Test.h>
+#include <Board.h>
 
 
 
@@ -14,6 +14,7 @@ private:
     void test_is_win3();
     void test_is_win4();
     void test_is_win5();
+    void test_is_win6();
     void test_is_draw();
     void test_move1();
     void test_move2();

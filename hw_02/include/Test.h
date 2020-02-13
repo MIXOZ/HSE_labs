@@ -5,9 +5,6 @@
 
 #include <stdint.h>
 #include <iostream>
-#include <Board.h>
-#include <Board.h>
-#include <cstring>
 
 class Test {
 protected:

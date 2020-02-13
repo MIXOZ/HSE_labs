@@ -1,7 +1,6 @@
-#include <stdint.h>
 #include <iostream>
-#include <Board.h>
 #include <cstring>
+#include <Board.h>
 
 
 int main(int argc, char* argv[]) {

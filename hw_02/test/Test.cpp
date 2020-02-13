@@ -1,11 +1,5 @@
-#include <stdint.h>
-#include <iostream>
-#include <Board.h>
-#include <cstring>
-#include <BoardTest.h>
-#include <Board.h>
 #include <Test.h>
-
+#include <BoardTest.h>
 
 void Test::check(bool expr, const char *func, const char  *filename, size_t line_num) {
     if (!expr) {

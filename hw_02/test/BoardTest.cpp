@@ -1,7 +1,4 @@
-#include <stdint.h>
 #include <iostream>
-#include <Board.h>
-#include <cstring>
 #include <BoardTest.h>
 #include <Board.h>
 #include <Test.h>
@@ -76,7 +73,57 @@ void BoardTest::test_is_win5() {
     b.move(5, 4);
     DO_CHECK(b.is_victory(5, 4, Field::X) == WIN);
 }
-    
+
+void BoardTest::test_is_win6() {
+    Board b;
+    for (int i = 0; i < 4; ++i) {
+        b.move(i, 0);
+        b.move(i, 1);
+        b.move(i, 2);
+        b.move(i, 3);
+        b.move(i, 4);
+        b.move(i, 5);
+        b.move(i, 6);
+        b.move(i, 7);
+        b.move(i, 8);
+        b.move(i, 9);
+    }
+    for (int i = 4; i < 8; ++i) {
+        b.move(i, 9);
+        b.move(i, 8);
+        b.move(i, 7);
+        b.move(i, 6);
+        b.move(i, 5);
+        b.move(i, 4);
+        b.move(i, 3);
+        b.move(i, 2);
+        b.move(i, 1);
+        b.move(i, 0);
+    }
+    for (int i = 8; i < 9; ++i) {
+        b.move(i, 0);
+        b.move(i, 1);
+        b.move(i, 2);
+        b.move(i, 3);
+        b.move(i, 4);
+        b.move(i, 5);
+        b.move(i, 6);
+        b.move(i, 7);
+        b.move(i, 8);
+        b.move(i, 9);
+    }
+    b.move(9, 0);
+    b.move(9, 1);
+    b.move(9, 9);
+    b.move(9, 2);
+    b.move(9, 8);
+    b.move(9, 3);
+    b.move(9, 7);
+    b.move(9, 4);
+    b.move(9, 6);
+    b.move(9, 5);
+    DO_CHECK(b.get_state(9, 5) == WIN);
+}
 
 void BoardTest::test_is_draw() {
     Board b;
@@ -93,16 +140,16 @@ void BoardTest::test_is_draw() {
         b.move(i, 9);
     }
     for (int i = 4; i < 8; ++i) {
-        b.move(i, 0);
-        b.move(i, 1);
-        b.move(i, 2);
-        b.move(i, 3);
-        b.move(i, 4);
-        b.move(i, 5);
-        b.move(i, 6);
-        b.move(i, 7);
-        b.move(i, 8);
         b.move(i, 9);
+        b.move(i, 8);
+        b.move(i, 7);
+        b.move(i, 6);
+        b.move(i, 5);
+        b.move(i, 4);
+        b.move(i, 3);
+        b.move(i, 2);
+        b.move(i, 1);
+        b.move(i, 0);
     }
     for (int i = 8; i < 10; ++i) {
         b.move(i, 0);
@@ -118,6 +165,7 @@ void BoardTest::test_is_draw() {
     }
     DO_CHECK(b.get_state(9, 9) == DRAW);
 }
+
 
 
 void BoardTest::test_move1() {
@@ -149,6 +197,7 @@ void BoardTest::run_all_tests() {
     test_is_win3();
     test_is_win4();
     test_is_win5();
+    test_is_win6();
     test_is_draw();
     test_move1();
     test_move2();
