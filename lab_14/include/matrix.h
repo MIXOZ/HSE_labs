@@ -10,7 +10,6 @@ public:
     Matrix(int n, int m);
     ~Matrix() = default;
 
-    std::vector<int> operator[](int i) const;
     Matrix &operator=(const Matrix &m);
 
     void matr_load(std::string file_name);

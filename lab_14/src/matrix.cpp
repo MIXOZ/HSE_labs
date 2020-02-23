@@ -100,7 +100,7 @@ void Matrix::matr_elem(int i, int j) {
     if (i >= rows || j >= cols || i < 0 || j < 0) {
         throw Matrix_Exception("ACCESS: bad index.");
     }
-    std::cout << matr[i][j];
+    std::cout << matr[i][j] << '\n';
 }
 
 //======================Exception======================
