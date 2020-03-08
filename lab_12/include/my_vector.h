@@ -33,8 +33,8 @@ public:
 
     void push_back(const T& t);
     void push_back(T&& t);
-    void pop_back();
-    void clear();
+    void pop_back() noexcept;
+    void clear() noexcept; 
 
     bool operator==(const my_vector& other) const;
 	bool operator!=(const my_vector& other) const;

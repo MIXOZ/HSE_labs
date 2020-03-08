@@ -54,17 +54,24 @@ my_vector<T>::my_vector(const my_vector& other) {
 }
     
 template<typename T>
-my_vector<T>::my_vector(my_vector &&other) {
-    std::swap(_capacity, other._capacity);
-    std::swap(_size, other._size);
-    std::swap(_array, other._array);
+my_vector<T>::my_vector(my_vector &&other)
+    :_array(other._array), _capacity(other._capacity), _size(other._size) {
+    other._array = nullptr;
+    other._size = 0;
+    other._capacity = 0;
 }
     
 template<typename T>
 my_vector<T> &my_vector<T>::operator=(my_vector&& other) {
+    if (&other == this)
+        return *this;
+    delete[] _array;
     std::swap(_capacity, other._capacity);
     std::swap(_size, other._size);
     std::swap(_array, other._array);
+    other._array = nullptr;
+    other._size = 0;
+    other._capacity = 0;
     return *this;
 }
     
@@ -165,12 +172,13 @@ void my_vector<T>::push_back(T&& t) {
 }
     
 template<typename T>
-void my_vector<T>::pop_back() {
+void my_vector<T>::pop_back() noexcept {
+    if (_size == 0) return;
     _array[--_size].~T();
 }
     
 template<typename T>
-void my_vector<T>::clear() {
+void my_vector<T>::clear() noexcept {
     while (_size)
         _array[--_size].~T();
 }
