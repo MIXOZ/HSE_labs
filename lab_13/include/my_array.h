@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <stdexcept>
+#include <limits.h>
 
 namespace lab_13 {
 
@@ -44,14 +45,14 @@ private:
 template<std::size_t N>
 class my_array<bool, N> {
 private:
-    const std::size_t _capacity = (N + 7) >> 3;
-    uint8_t _array[(N + 7) >> 3];
+    const std::size_t _capacity = (N + CHAR_BIT - 1) >> 3;
+    uint8_t _array[(N + CHAR_BIT - 1) >> 3];
 
     std::size_t get_byte(std::size_t byte) const {
         return byte >> 3;
     }
     std::size_t get_bit(std::size_t bit) const {
-        return bit & 7;
+        return bit & (CHAR_BIT - 1);
     }
 
     class _proxy {
