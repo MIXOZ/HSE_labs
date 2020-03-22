@@ -47,32 +47,32 @@ private:
     const std::size_t _capacity = (N + 7) >> 3;
     uint8_t _array[(N + 7) >> 3];
 
-    std::size_t get_block(std::size_t index) const {
-        return index >> 3;
+    std::size_t get_byte(std::size_t byte) const {
+        return byte >> 3;
     }
-    std::size_t get_index(std::size_t index) const {
-        return index & 7;
+    std::size_t get_bit(std::size_t bit) const {
+        return bit & 7;
     }
 
     class _proxy {
     public:
-        _proxy(uint8_t* block, std::size_t index) :
-                block(block), index(index) {
+        _proxy(uint8_t* byte, std::size_t bit) :
+                byte(byte), bit(bit) {
         }
         _proxy& operator=(_proxy other) {
             return *this = bool(other);
         }
         _proxy& operator=(bool value) {
-            *block &= ~(1 << index);
-            *block |= ((int)value) << index;
+            *byte &= ~(1 << bit);
+            *byte |= ((int)value) << bit;
             return *this;
         }
         operator bool() const {
-            return bool((*block >> index) & 1);
+            return bool((*byte >> bit) & 1);
         }
 
-        uint8_t* block;
-        std::size_t index;
+        uint8_t* byte;
+        std::size_t bit;
     };
 
 public:
@@ -86,10 +86,10 @@ public:
     }
 
     _proxy operator[](std::size_t index) {
-        return _proxy(_array + get_block(index), get_index(index));
+        return _proxy(_array + get_byte(index), get_bit(index));
     }
     bool operator[](std::size_t index) const {
-        return (_array[get_block(index)] >> get_index(index)) & 1;
+        return (_array[get_byte(index)] >> get_bit(index)) & 1;
     }
 
     bool empty() const {
