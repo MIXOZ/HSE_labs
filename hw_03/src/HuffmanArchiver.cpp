@@ -12,12 +12,12 @@ void HuffmanArchiver::print_time() const {
     std::cout << size_init << '\n' << size_fin << '\n' << size_table << '\n';
 }
 
-void HuffmanArchiver::archive(std::stringstream& in, std::stringstream& out) {
-    in.seekg(0, std::stringstream::end);
+void HuffmanArchiver::archive(std::ifstream& in, std::ofstream& out) {
+    in.seekg(0, in.end);
     int length = in.tellg();
     size_init = in.tellg();
-    in.seekg(0, std::stringstream::beg);
-    std::map<char, int> frequency_table;
+    in.seekg(0, out.beg);
+    std::map<char, int> frequency_table;    
     for (int i = 0; i < length; i++) {
         char symbol;
         in.get(symbol);
@@ -27,7 +27,7 @@ void HuffmanArchiver::archive(std::stringstream& in, std::stringstream& out) {
     set_table(out, frequency_table);
     out.write((char*) &length, HALF_BAIT);
     size_table += HALF_BAIT;
-    in.seekg(0, std::stringstream::beg);
+    in.seekg(0, in.beg);
     for (int i = 0; i < length; i++) {
         char symbol;
         in.get(symbol);
@@ -37,7 +37,7 @@ void HuffmanArchiver::archive(std::stringstream& in, std::stringstream& out) {
     print_time();
 }
 
-void HuffmanArchiver::unarchive(std::stringstream& in, std::stringstream& out) {
+void HuffmanArchiver::unarchive(std::ifstream& in, std::ofstream& out) {
     std::map<char, int> frequency_table;
     get_table(in, frequency_table);
     HuffmanTree tree(frequency_table);
@@ -68,7 +68,7 @@ void HuffmanArchiver::unarchive(std::stringstream& in, std::stringstream& out) {
     print_time();
 }
 
-void HuffmanArchiver::set_table(std::stringstream& out, const std::map<char, int>& frequency_table) {
+void HuffmanArchiver::set_table(std::ofstream& out, const std::map<char, int>& frequency_table) {
     int size = frequency_table.size();
     out.write((char*) &size, HALF_BAIT);
     for (auto& symbol : frequency_table) {
@@ -78,7 +78,7 @@ void HuffmanArchiver::set_table(std::stringstream& out, const std::map<char, int
     size_table += size * TABLE_SCALE + HALF_BAIT;
 }
 
-void HuffmanArchiver::set_bit(std::stringstream& out, int bit, bool flush) {
+void HuffmanArchiver::set_bit(std::ofstream& out, int bit, bool flush) {
     static char buf = 0;
     static int cur_pos = 0;
     if (flush) {
@@ -97,13 +97,13 @@ void HuffmanArchiver::set_bit(std::stringstream& out, int bit, bool flush) {
     }
 }
 
-void HuffmanArchiver::set_value(std::stringstream& out, const std::shared_ptr<HuffmanNode>& node) {
+void HuffmanArchiver::set_value(std::ofstream& out, const std::shared_ptr<HuffmanNode>& node) {
     if (!node->can_move_up()) return;
     set_value(out, node->move_up());
     set_bit(out, node->move_up()->move_down(0) == node ? 0 : UNIQ, false);
 }
 
-void HuffmanArchiver::get_table(std::stringstream& in, std::map<char, int>& frequency_table) {
+void HuffmanArchiver::get_table(std::ifstream& in, std::map<char, int>& frequency_table) {
     int size;
     in.read((char*) &size, HALF_BAIT);
     for (int i = 0; i < size; i++) {

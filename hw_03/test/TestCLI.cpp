@@ -30,7 +30,7 @@ TEST_CASE ("test_get_action_unarchivate") {
     CLI cli(argc, argv);
     std::string in;
     std::string out;
-    CHECK(cli.get_action(in, out) == ARCHIVATE);
+    CHECK(cli.get_action(in, out) == UNARCHIVATE);
     CHECK(out == "input.txt");
     CHECK(in == "output.bin");
 }

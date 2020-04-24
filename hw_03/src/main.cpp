@@ -6,20 +6,20 @@ int main(int argc, char** argv) {
     static std::string out;
     CLI cli(argc, argv);
 
-    std::stringstream fin;
-    std::stringstream fout;
+    std::ifstream fin;
+    std::ofstream fout;
 
     HuffmanArchiver zip;
 
     try {
         if (cli.get_action(in, out) == ARCHIVATE) {
-            fin = std::stringstream(in, std::stringstream::in);
-            fout = std::stringstream(out, std::stringstream::binary);
+            fin = std::ifstream(in, std::ifstream::in);
+            fout = std::ofstream(out, std::ofstream::binary);
             if (!(fin.good() && fout.good())) throw FileException();
             zip.archive(fin, fout);
         } else {
-            fin = std::stringstream(in, std::stringstream::binary);
-            fout = std::stringstream(out, std::stringstream::out);
+            fin = std::ifstream(in, std::stringstream::binary);
+            fout = std::ofstream(out, std::stringstream::out);
             if (!(fin.good() && fout.good())) throw FileException();
             zip.unarchive(fin, fout);
         }
