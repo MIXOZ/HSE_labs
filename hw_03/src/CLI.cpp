@@ -1,5 +1,6 @@
 #include "../include/CLI.h"
 
+
 const char* ParceException::what() const noexcept {
     return "invalid arguments";
 }

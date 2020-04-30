@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstring>
 #include <string>
+#include "HuffmanArchiver.h"
 
 enum Action {
     ARCHIVATE,
@@ -23,14 +24,11 @@ public:
 class CLI {
 public:
     CLI(int _argc, char** _argv) : argc(_argc), argv(_argv) {};
-    bool parseArguments(int pos, char** _argv, int& _type_id, int& _fin_id, int& _fout_id);
     Action get_action(std::string &in,std::string &out);
 private:
+    bool parseArguments(int pos, char** _argv, int& _type_id, int& _fin_id, int& _fout_id);
     int argc;
     char** argv;
-    int type_id = -1; 
-    int fin_id = -1;
-    int fout_id = -1;
 };
 
 #endif //C___CLI_H

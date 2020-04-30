@@ -2,14 +2,14 @@
 #include "../include/HuffmanArchiver.h"
 
 int main(int argc, char** argv) {
-    static std::string in;
-    static std::string out;
-    CLI cli(argc, argv);
+    std::string in;
+    std::string out;
+    CLI cli (argc, argv);
 
     std::ifstream fin;
     std::ofstream fout;
 
-    HuffmanArchiver zip;
+    HuffmanArchiver::HuffmanArchiver zip;
 
     try {
         if (cli.get_action(in, out) == ARCHIVATE) {
